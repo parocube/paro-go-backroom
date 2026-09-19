@@ -1,0 +1,51 @@
+name: Backroom Quality
+
+on:
+  pull_request:
+    branches: [main, 'release/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backroom-quality-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Backroom tests and module checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:18.4
+        env:
+          POSTGRES_DB: paro_backroom_test
+          POSTGRES_USER: paro_test
+          POSTGRES_PASSWORD: paro_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U paro_test -d paro_backroom_test"
+          --health-interval 1s --health-timeout 3s --health-retries 30
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Verify module files
+        run: |
+          go mod tidy
+          git diff --exit-code
+      - name: Static checks, race tests, build and release scripts
+        run: make verify
+      - name: Real PostgreSQL integration tests
+        env:
+          TEST_DATABASE_URL: postgres://paro_test:paro_test@localhost:5432/paro_backroom_test?sslmode=disable
+        run: make test-integration
+      - name: Reachable dependency vulnerabilities
+        run: make vuln
