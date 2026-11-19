@@ -1,6 +1,6 @@
 # Backroom 开发约束
 
-遵循 [通用编码规范](../paro-docs/standards/coding-standard.md)、[Go 技术规范](../paro-docs/standards/technology/go-standard.md) 和 [AI 执行标准](../paro-docs/standards/ai-execution-standard.md)。
+遵循 [通用编码规范](../paro-core-doc/standards/coding-standard.md)、[Go 技术规范](../paro-core-doc/standards/technology/go-standard.md) 和 [AI 执行标准](../paro-core-doc/standards/ai-execution-standard.md)。
 
 - 这里只接受有现有调用方的业务无关 Go 能力；不能导入 Member 或其他应用的 `internal` 包。
 - 不包含业务模型、权限规则、业务错误码、应用环境配置、密钥或业务 SQL；错误由调用服务映射。
