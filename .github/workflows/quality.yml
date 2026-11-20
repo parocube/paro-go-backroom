@@ -1,8 +1,7 @@
 name: Backroom Quality
 
 on:
-  pull_request:
-    branches: [main, 'release/**']
+  workflow_call:
   workflow_dispatch:
 
 permissions:

@@ -156,6 +156,7 @@ create_tag() {
     return
   fi
   [ "$VERSION_PATCH" -eq "$expected_patch" ] || die "version $version is not the next release version; expected ${BASE_MAJOR}.${BASE_MINOR}.${expected_patch}"
+  if [ "$command_name" = check-tag ]; then return 0; fi
   git tag -a "$tag_name" "$requested_sha" -m "Release $tag_name"
   git push "$remote" "refs/tags/$tag_name:refs/tags/$tag_name"
   printf 'created annotated tag %s at %s\n' "$tag_name" "$requested_sha"
@@ -302,7 +303,7 @@ command_name=$1
 shift
 case "$command_name" in
   validate-pr) validate_pr "$@" ;;
-  create-tag) create_tag "$@" ;;
+  check-tag|create-tag) create_tag "$@" ;;
   reconcile-tags) reconcile_tags "$@" ;;
   read-version)
     read_version_file "$@" || { read_status=$?; [ "$read_status" -eq 2 ] && die "cannot read VERSION from ${1:-}"; die "invalid VERSION from ${1:-}"; }
