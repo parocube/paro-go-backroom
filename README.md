@@ -16,7 +16,7 @@ ParoCube 的 Go 公共库。从 Member 中提取已实际使用的通用实现�
 
 公开仓库为 [parocube/paro-go-backroom](https://github.com/parocube/paro-go-backroom)，模块路径为 `github.com/parocube/paro-go-backroom`，使用 Go 1.26.0 和工具链 1.26.6。首次发布版本为 `v0.1.0`；初始化基线的 `0.0.0` 不发布 Tag，也不能作为消费者依赖。
 
-根目录 [VERSION](VERSION) 是唯一的发布版本来源。任务分支通过 PR 合入 `release/X.Y`，通过质量和版本检查后生成不可变附注 Tag `vX.Y.Z`；每个发布 PR 递增补丁位，完成的发布分支再通过 PR 合入 `main`。已发布的 Tag 不移动、不覆盖，修复必须进入下一补丁版本。库以 Go module 源码交付，不包含服务部署。
+根目录 [VERSION](VERSION) 是唯一的发布版本来源。任务分支通过 PR 合入 `release/X.Y`，完成的发布分支通过 PR 合入 `main`。该 PR 就绪后运行质量和版本检查，合并后验证对应成功回执，再为已验证的 release 源提交生成附注 Tag `vX.Y.Z`。已发布的 Tag 不移动、不覆盖，修复必须进入下一补丁版本。库以 Go module 源码交付，不包含服务部署。
 
 消费者使用 `go get github.com/parocube/paro-go-backroom@v0.1.0` 固定版本，无需私有仓库凭据或同级源码目录。协同开发可以在本机使用未提交的 Go workspace，不在消费者 `go.mod` 中提交相对 `replace`。
 

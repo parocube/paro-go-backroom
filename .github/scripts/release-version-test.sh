@@ -75,6 +75,11 @@ commit_raw_version() {
   VERSION_SHA=$(git -C "$WORK_REPOSITORY" rev-parse HEAD)
 }
 
+new_repository candidate-version
+run_release_script check-tag release/1.0 1.0.0 "$FIRST_SHA" .
+if [ -n "$(git -C "$WORK_REPOSITORY" tag --list)" ]; then fail 'candidate check created a tag'; fi
+if run_release_script check-tag release/1.0 2.0.0 "$FIRST_SHA" .; then fail 'candidate used another release line'; fi
+
 new_repository validate
 
 case_name='validate-pr accepts the bootstrap release with missing base VERSION represented as 0.0.0'
